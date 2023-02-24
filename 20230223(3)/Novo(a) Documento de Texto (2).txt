@@ -1,0 +1,77 @@
+public static void modificarCadastroGerente(ContaCorrente b, ContaPoupanca c) {	
+	ContaCorrente f = null;
+		if(contasCorrente.size()==0) {
+			criarContaGerente(b, c);
+		}
+		else {	
+			String numCpf = JOptionPane.showInputDialog("Informe CPF da Conta a qual deseja modificar: ");
+			if(encontrarCpf(numCpf, contasCorrente)) {
+				f = encontrarC(numCpf, contasCorrente);
+				Pessoa pessoa = new Pessoa();
+
+				pessoa.setNome(JOptionPane.showInputDialog("Nome: "));
+				if (pessoa.getNome() == null) {
+					JOptionPane.showMessageDialog(null, "Cancelado!");
+					menuGerente(b, c);
+				} else if (pessoa.getNome().equalsIgnoreCase("")) {
+					JOptionPane.showMessageDialog(null, "Campo Vazio!");
+					menuGerente(b, c);
+				} else if (!pessoa.getNome().matches("[A-Z]*")) {
+					JOptionPane.showMessageDialog(null, "Nome deve ser composto por letras!");
+					menuGerente(b, c);
+				}
+				pessoa.setCpf(JOptionPane.showInputDialog("CPF: "));
+				if (pessoa.getCpf() == null) {
+					JOptionPane.showMessageDialog(null, "Cancelado!");
+					menuGerente(b, c);
+				} else if (pessoa.getCpf().equalsIgnoreCase("")) {
+					JOptionPane.showMessageDialog(null, "Campo Vazio!");
+					menuGerente(b, c);
+				} else if (pessoa.getCpf().length() != 11) {
+					JOptionPane.showMessageDialog(null, "CPF deve ser composto por 11 digitos numéricos!");
+					menuGerente(b, c);
+				} else if (!pessoa.getCpf().matches("[0-9]*")) {
+					JOptionPane.showMessageDialog(null, "CPF deve ser composto por 11 digitos numéricos!");
+					menuGerente(b, c);
+				} else if (!f.getPessoa().getCpf().equals(pessoa.getCpf())) {
+					if (encontrarCpf(pessoa.getCpf(), contasCorrente)) {
+						JOptionPane.showMessageDialog(null, "CPF já existente no banco de dados!");
+						menuGerente(b, c);
+					}
+				}
+				pessoa.setEmail(JOptionPane.showInputDialog("E-mail: "));
+				if (pessoa.getEmail() == null) {
+					JOptionPane.showMessageDialog(null, "Cancelado!");
+					menuGerente(b, c);
+				} else if (pessoa.getEmail().equalsIgnoreCase("")) {
+					JOptionPane.showMessageDialog(null, "Campo Vazio!");
+					menuGerente(b, c);
+				}
+
+				double saldoCc = b.getSaldo();
+				double saldoCp = c.getSaldo();
+
+				// IMPORTANTE
+				b = new ContaCorrente(pessoa);
+				c = new ContaPoupanca(b);
+
+				b.setSaldo(saldoCc);
+				c.setSaldo(saldoCp);
+
+				contasCorrente.set(b.getID() - 1, b);
+				contasPoupanca.set(c.getID() - 1, c);
+
+				JOptionPane.showMessageDialog(null,
+						"Confira seus dados!" + "\nConta Corrente: " + b.getNumeroConta() + "\nConta Poupança: "
+								+ c.getNumeroConta() + "\nSenha: " + b.getSenha() + "\nNome: " + b.getPessoa().getNome() + "\nCPF: "
+								+ b.getPessoa().modCpf() + "\nE-mail: " + b.getPessoa().getEmail());
+
+				JOptionPane.showMessageDialog(null, "Sua conta foi modificada com sucesso!");
+				menuGerente(b, c);
+			}else {
+				JOptionPane.showMessageDialog(null, "CPF e/ou Conta não enoontrada!");
+				menuGerente(b, c);
+			}
+			
+		}				
+	}
