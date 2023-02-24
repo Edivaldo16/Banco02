@@ -1,0 +1,57 @@
+	public static void criarContaGerente(ContaCorrente a, ContaPoupanca b) {
+
+		Pessoa pessoa = new Pessoa();
+
+		pessoa.setNome(JOptionPane.showInputDialog("Nome: "));
+		if (pessoa.getNome() == null) {
+			JOptionPane.showMessageDialog(null, "Cancelado!");
+			menuGerente(a,b);
+		} else if (pessoa.getNome().equalsIgnoreCase("")) {
+			JOptionPane.showMessageDialog(null, "Campo Vazio!");
+			menuGerente(a,b);
+		} else if (!pessoa.getNome().matches("[A-Z]*")) {
+			JOptionPane.showMessageDialog(null, "Nome deve ser composto por letras!");
+			menuGerente(a,b);
+		}
+		pessoa.setCpf(JOptionPane.showInputDialog("CPF: "));
+		if (pessoa.getCpf() == null) {
+			JOptionPane.showMessageDialog(null, "Cancelado!");
+			menuGerente(a,b);
+		} else if (pessoa.getCpf().equalsIgnoreCase("")) {
+			JOptionPane.showMessageDialog(null, "Campo Vazio!");
+			menuGerente(a,b);
+		} else if (pessoa.getCpf().length() != 11) {
+			JOptionPane.showMessageDialog(null, "CPF deve ser composto por 11 digitos numéricos!");
+			menuGerente(a,b);
+		} else if (!pessoa.getCpf().matches("[0-9]*")) {
+			JOptionPane.showMessageDialog(null, "CPF deve ser composto por 11 digitos numéricos!");
+			menuGerente(a,b);
+		} else if (encontrarCpf(pessoa.getCpf(), contasCorrente)) {
+			JOptionPane.showMessageDialog(null, "CPF já existente no banco de dados!");
+			menuGerente(a,b);
+		}
+		pessoa.setEmail(JOptionPane.showInputDialog("E-mail: "));
+		if (pessoa.getEmail() == null) {
+			JOptionPane.showMessageDialog(null, "Cancelado!");
+			menuGerente(a,b);
+		} else if (pessoa.getEmail().equalsIgnoreCase("")) {
+			JOptionPane.showMessageDialog(null, "Campo Vazio!");
+			menuGerente(a,b);
+		}
+
+		ContaCorrente cc = new ContaCorrente(pessoa);
+		ContaPoupanca cp = new ContaPoupanca(cc);
+
+		contasCorrente.add(cc);
+		contasPoupanca.add(cp);
+
+		JOptionPane.showMessageDialog(null,
+				"Confira seus dados!" + "\nConta Corrente: " + cc.getNumeroConta() + "\nConta Poupança: "
+						+ cp.getNumeroConta() + "\nSenha: " + cc.getSenha() + "\nNome: " + cc.getPessoa().getNome()
+						+ "\nCPF: " + cc.getPessoa().modCpf() + "\nE-mail: " + cc.getPessoa().getEmail());
+		// Futuramente senha randômica
+		JOptionPane.showMessageDialog(null, "Sua conta foi criada com sucesso!");
+
+		menuGerente(a,b);
+		// menu();
+	}
